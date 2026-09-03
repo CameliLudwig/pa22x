@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/translations"/>
+    <qresource prefix="/">
+        <file>images/app-custom.png</file>
+        <file>images/app-name-custom.png</file>
+        <file>images/app-name.png</file>
+        <file>images/down-arrow-dark.svg</file>
+        <file>images/down-arrow-light.svg</file>
+        <file>images/down-arrow.png</file>
+        <file>images/file.png</file>
+        <file>images/flag-china.png</file>
+        <file>images/flag-usa.png</file>
+        <file>images/iptfm-gray.png</file>
+        <file>images/iptfm.png</file>
+        <file>images/st-ndt.png</file>
+        <file>images/usst-iptfm.png</file>
+        <file>images/usst-logo.png</file>
+        <file>images/tang.png</file>
+        <file>images/tang.gif</file>
+        <file>images/up-arrow-dark.svg</file>
+        <file>images/up-arrow-light.svg</file>
+    </qresource>
+</RCC>
