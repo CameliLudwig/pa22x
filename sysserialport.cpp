@@ -246,12 +246,12 @@ void SYSserialport::Check()
     // const USHORT Uvalue = static_cast<USHORT>(rawDac + 0.5);
 
     // 4.txt存储的是板卡目标电流，单位mA
-    const double outputCurrent = qBound(4.0, value, 20.0);
+    const double outputCurrent = qBound(4.0, value, 20.0) - 4.0;
 
     // 模块配置为0-20mA量程时，将电流转换成12位DAC码
     const USHORT Uvalue =
         static_cast<USHORT>(
-                outputCurrent * 4095.0 / 20.0 + 0.5);
+                outputCurrent * 4095.0 / 16.0);
 
 
     QString hexStr = QString("%1").arg(Uvalue, 4, 16, QChar('0')).toUpper(); // 转 HEX 并补零

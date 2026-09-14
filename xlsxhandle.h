@@ -9,7 +9,6 @@
 #include "xlsxchart.h"
 #include "xlsxrichstring.h"
 #include "xlsxworkbook.h"
-#include <QtConcurrent/QtConcurrent>
 #include <QTimer>
 #include <QVector>
 class xlsxHandle : public QObject
@@ -31,9 +30,17 @@ public slots:
     void flushAndWait();
 
 private:
+    struct SaveResult {
+        bool success = false;
+        int rowCount = 0;
+        QString errorMessage;
+    };
+
     bool appendRowLocked(const QStringList& columns, QString* errorMessage = nullptr);
     bool flushBufferLocked(QString* errorMessage = nullptr);
-    bool ensureWorkbookReady(QXlsx::Document& xlsx, QString* errorMessage = nullptr);
+    void applySaveResultLocked(const SaveResult& result);
+    static bool ensureWorkbookReady(QXlsx::Document& xlsx, QString* errorMessage = nullptr);
+    static SaveResult saveRows(const QString& filePath, const QVector<QStringList>& rowsToWrite);
     bool createNewExcelFileLocked(QString* errorMessage = nullptr);
     QString buildLogFilePath() const;
     void scheduleFlush();
@@ -44,8 +51,6 @@ private:
     int m_cachedRowCount = 0;
     int m_consecutiveSaveFailures = 0;
     QTimer* m_flushTimer = nullptr;
-    QVector<QStringList> m_saveInFlight;    // 正在后台保存的数据副本
-    std::atomic_bool m_saveRunning{false};  // 后台保存进行中标志
 };
 
 #endif // XLSXHANDLE_H

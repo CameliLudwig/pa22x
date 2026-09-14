@@ -76,7 +76,9 @@ void installCrashHandlers()
 
 int main(int argc, char *argv[])
 {
+#ifndef QT_DEBUG
     installCrashHandlers();
+#endif
 
     //下面两种方法都可以,Qt默认采用的是 AA_UseDesktopOpenGL
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
