@@ -6953,11 +6953,12 @@ void pa22x::onTimerCheck()
         // fb3.close(); // 关闭文件
 
 
-        // 根据UI细度计算板卡目标电流
-        const double outputCurrent = qBound(
-                4.0,
-                4.0 + (8.0 / 95.0) * (avedv90Display - 10.0),
-                20.0);
+        // 检测到无效频谱时立即降至 4mA，避免 EMA 保留历史值而延迟安全输出。
+        const double outputCurrent = !spectrumQualityValid
+            ? kCurrentMin_mA
+            : qBound(kCurrentMin_mA,
+                 kCurrentMin_mA + (8.0 / 95.0) * (avedv90Display - 10.0),
+                 kCurrentMax_mA);
 
         // 保存当前板卡目标电流，单位mA
         const QString currentOutputFilePath = analogOutputFilePath(appDir);
@@ -7072,11 +7073,7 @@ void pa22x::onTimerCheck()
         //判断是否调用4-20mA输出程序
         //0:衰减谱有效；1:衰减谱第一次无效；avecoun*2+1:长时间无有效波形信号
         if (shouldEmitCheck)
-        {
-            //串口板卡部分
-
-            emit check();
-        }
+            emit check(outputCurrent);
 
     });
 
@@ -7094,10 +7091,10 @@ void pa22x::updateTime(int seconds) {
 }
 //串口板卡部分
 
-void pa22x::onserialcheck()
+void pa22x::onserialcheck(double outputCurrent)
 {
     if (serial)
-        serial->Check();
+        serial->Check(outputCurrent);
 }
 
 void pa22x::on_SpecAnaly_clicked(bool checked)

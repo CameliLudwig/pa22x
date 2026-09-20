@@ -169,26 +169,10 @@ void SYSserialport::ClearSeria()
     mSerial->clear();
 }
 
-void SYSserialport::Check()
+void SYSserialport::Check(double value)
 {
-    //读入电流值
+    // 使用本轮检测直接传入的目标电流，避免读取 4.txt 时序不一致。
     const QString appDir = QCoreApplication::applicationDirPath();
-    QString filePath = QDir(appDir).filePath(QStringLiteral("4.txt"));
-    QFile file(filePath);
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        emit toerror("无法打开文件：" + filePath);
-        return;
-    }
-    QTextStream in(&file);
-    QString line = file.readLine();
-    bool ok;
-    double  value = line.toDouble(&ok);
-    file.close();
-    if (!ok) {
-        emit toerror("文件内容无效：" + filePath);
-        return;
-    }
 
     // 标定使用的文件（缺失或格式异常时回退默认值，不弹阻塞错误）
     double dCalibration1 = 0.0;
@@ -245,7 +229,7 @@ void SYSserialport::Check()
     // const double rawDac = qBound(0.0, static_cast<double>(value), 4095.0);
     // const USHORT Uvalue = static_cast<USHORT>(rawDac + 0.5);
 
-    // 4.txt存储的是板卡目标电流，单位mA
+    // outputCurrent 是板卡目标电流，单位 mA。
     const double outputCurrent = qBound(4.0, value, 20.0) - 4.0;
 
     // 模块配置为0-20mA量程时，将电流转换成12位DAC码

@@ -114,13 +114,13 @@ signals:
       void updatePlotData(double specfmin,double specfmax, double minsp ,double maxsp);
       void updateLabelData(QString name,QString data);
       void error(QString error);
-      void check();
+    void check(double outputCurrent);
 private slots:
       void onPlotDataUpdate(double specfmin,double specfmax, double minsp ,double maxsp);
       void onLabelDataUpdate(QString name,QString data);
       void onTimerCheck();
       void onerror(QString error);
-      void onserialcheck();
+    void onserialcheck(double outputCurrent);
 private:
     Ui::pa22x *ui;
     //设置英文版本的初始化

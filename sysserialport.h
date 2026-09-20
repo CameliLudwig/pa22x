@@ -15,7 +15,7 @@ class SYSserialport : public QObject
 public:
     SYSserialport();
     ~SYSserialport();
-    void Check();
+    void Check(double outputCurrent);
     void InitSerial();
     void CloseSerial();
     void ClearSeria();
